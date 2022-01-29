@@ -1,31 +1,102 @@
+@import "font/stylesheet.css";
+
+body {
+  background-color: #f5f5f5;
+  font-family: "Source Sans Pro", sans-serif;
+}
+
 .guesses {
   display: flex;
   justify-content: center;
   align-items: center;
   min-width: 600px;
-}
-
-img {
-  min-width: 600px;
   max-width: 100%;
   height: auto;
 }
 
-.imagemap {
-  position: relative;
+.scores,
+.results {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 24px;
 }
 
-.imagemap img {
+.results {
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 80px;
+}
+
+.score,
+#result {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 8px 0px;
+}
+
+.history {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 48px;
+  margin-bottom: 24px;
+}
+
+button.play {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  margin-right: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Adapted from https://stackoverflow.com/a/48916502/4245038 */
+#player-guess {
+  display: inline-flex;
+  justify-content: center;
+  align-items: flex-end;
+  flex-direction: row;
+}
+#computer-guess {
+  display: inline-flex;
+  justify-content: center;
+  align-items: flex-end;
+  flex-direction: row-reverse;
+}
+#player-guess .guess-image-container,
+#computer-guess .guess-image-container {
+  position: relative;
+  border: 4px solid #f5f5f5;
+  border-radius: 50%;
+  overflow: hidden;
+  width: 40px;
+  margin-left: -32px;
+}
+#player-guess .guess-image-container img,
+#computer-guess .guess-image-container img {
+  width: 100%;
   display: block;
 }
 
+/* Adapted from https://stackoverflow.com/a/64711402/4245038 */
+.imagemap {
+  position: relative;
+}
+.imagemap img {
+  display: block;
+}
 .imagemap .guess {
   display: block;
   position: absolute;
   transition: box-shadow 0.15s ease-in-out;
   border-radius: 50%;
 }
-
 .imagemap .guess:hover {
   box-shadow: 0 50px 100px -20px rgba(50, 50, 93, 0.25),
     0 30px 60px -30px rgba(0, 0, 0, 0.3),
