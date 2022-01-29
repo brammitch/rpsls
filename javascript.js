@@ -1,5 +1,6 @@
 /**
  * @typedef {('Scissors' | 'Paper' | 'Rock' | 'Lizard' | 'Spock')} Guess
+ * @typedef {('Win' | 'Lose' | 'Tie')} Result
  */
 
 const RPSLS_LOOKUP = {
@@ -33,6 +34,67 @@ function computerPlay() {
 
 /**
  *
+ * @param {Guess} guessA
+ * @param {Guess} guessB
+ * @returns {(string | null)}
+ */
+function getVerb(guessA, guessB) {
+  let verb = "";
+
+  switch (guessA) {
+    case "Scissors":
+      switch (guessB) {
+        case "Lizard":
+          verb = "decapitates";
+          break;
+        case "Paper":
+          verb = "cuts";
+          break;
+        case "Rock":
+          verb = "crushes";
+          break;
+        case "Spock":
+          verb = "smashes";
+          break;
+      }
+      break;
+    case "Paper":
+      switch (guessB) {
+        case "Lizard":
+          verb = "eats";
+          break;
+        case "Rock":
+          verb = "covers";
+          break;
+        case "Spock":
+          verb = "disproves";
+          break;
+      }
+      break;
+    case "Rock":
+      switch (guessB) {
+        case "Lizard":
+          verb = "crushes";
+          break;
+        case "Spock":
+          verb = "vaporizes";
+          break;
+      }
+      break;
+    case "Lizard":
+      switch (guessB) {
+        case "Spock":
+          verb = "poisons";
+          break;
+      }
+      break;
+  }
+
+  return verb;
+}
+
+/**
+ *
  * @param {Guess} playerGuess
  * @returns {string}
  */
@@ -52,10 +114,15 @@ function playRound(playerGuess) {
     return "Tie Game! You both guessed " + playerGuess + ".";
   }
 
+  let verb = getVerb(playerGuess, computerGuess);
+  if (!verb) {
+    verb = getVerb(computerGuess, playerGuess);
+  }
+
   if ((result > 0 && result % 2 === 0) || (result < 0 && result % 2 !== 0)) {
-    return "You win! " + playerGuess + " beats " + computerGuess + ".";
+    return "You win! " + playerGuess + " " + verb + " " + computerGuess + ".";
   } else {
-    return "You lose! " + computerGuess + " beats " + playerGuess + ".";
+    return "You lose! " + computerGuess + " " + verb + " " + playerGuess + ".";
   }
 }
 
@@ -78,22 +145,7 @@ function game(guess) {
   console.log(
     result + " -- Player: " + playerScore + " Computer: " + computerScore
   );
-
-  // if (playerScore > computerScore) {
-  //   return "You win the game! You had " + playerScore + " point(s).";
-  // } else if (playerScore < computerScore) {
-  //   return "You lose the game! You had " + playerScore + " point(s).";
-  // } else {
-  //   return "It's a tie! You both had " + playerScore + " point(s).";
-  // }
 }
-
-// const guesses = document.querySelectorAll("div.guess");
-// const image = document.querySelector("img[usemap]");
-// const mapid = image.getAttribute("usemap").substring(1);
-// const imagemap = document.querySelector('map[name="' + mapid + '"]');
-// const areas = imagemap.querySelectorAll("area");
-// console.log("areas", areas);
 
 function setupImagemap() {
   // adapted from https://stackoverflow.com/a/64711402/4245038
