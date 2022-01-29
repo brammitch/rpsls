@@ -1,0 +1,222 @@
+@import "font/stylesheet.css";
+
+:root {
+  --Rock: #ffd5d5;
+  --Paper: #fff6d5;
+  --Scissors: #f6d5ff;
+  --Lizard: #d7f4d7;
+  --Spock: #d5e5ff;
+  --header-bg: rgb(10, 10, 10);
+}
+
+body {
+  font-family: "Source Sans Pro", sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-width: 600px;
+  height: 100vh;
+  margin: 0;
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--header-bg);
+  height: 6vh;
+}
+
+header span {
+  padding: 0px 4px;
+  font-size: 32px;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 960px;
+  background-color: #f5f5f5;
+  height: 88vh;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--header-bg);
+  height: 6vh;
+  color: #fff;
+  padding: 0px 16px;
+}
+
+.footer-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  max-width: 960px;
+}
+
+footer .center {
+  flex: 1 0 auto;
+}
+
+.attribution {
+  font-size: 0.8rem;
+}
+
+.attribution a {
+  color: #fff;
+}
+
+.rock {
+  color: var(--Rock);
+}
+.paper {
+  color: var(--Paper);
+}
+.scissors {
+  color: var(--Scissors);
+}
+.lizard {
+  color: var(--Lizard);
+}
+.spock {
+  color: var(--Spock);
+}
+
+.guesses {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 600px;
+  max-width: 100%;
+  height: auto;
+}
+
+.stats {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 600px;
+  max-width: 100%;
+  height: auto;
+}
+
+.stats-display {
+  margin-top: 12px;
+}
+
+.scores,
+.results {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.results {
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 132px;
+}
+
+.score,
+#result {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 8px 0px;
+}
+
+.score-label {
+  font-size: 1.2rem;
+  font-weight: bolder;
+}
+
+.score-number {
+  font-size: 2rem;
+}
+
+#result {
+  font-size: 1.2rem;
+  width: auto;
+  min-height: 80px;
+}
+
+#result span {
+  text-align: center;
+  width: 600px;
+  padding: 8px 0;
+}
+
+.history {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 48px;
+}
+
+button {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button.inverse {
+  color: #fff;
+  background-color: #ccc;
+}
+
+/* Adapted from https://stackoverflow.com/a/48916502/4245038 */
+#player-guess {
+  display: inline-flex;
+  justify-content: center;
+  align-items: flex-end;
+  flex-direction: row;
+}
+#computer-guess {
+  display: inline-flex;
+  justify-content: center;
+  align-items: flex-end;
+  flex-direction: row-reverse;
+}
+#player-guess .guess-image-container,
+#computer-guess .guess-image-container {
+  position: relative;
+  border: 4px solid #f5f5f5;
+  border-radius: 50%;
+  overflow: hidden;
+  width: 40px;
+  margin-left: -32px;
+}
+#player-guess .guess-image-container img,
+#computer-guess .guess-image-container img {
+  width: 100%;
+  display: block;
+}
+
+/* Adapted from https://stackoverflow.com/a/64711402/4245038 */
+.imagemap {
+  position: relative;
+}
+.imagemap img {
+  display: block;
+}
+.imagemap .guess {
+  display: block;
+  position: absolute;
+  transition: box-shadow 0.15s ease-in-out;
+  border-radius: 50%;
+}
+.imagemap .guess:hover {
+  box-shadow: 0 50px 100px -20px rgba(50, 50, 93, 0.25),
+    0 30px 60px -30px rgba(0, 0, 0, 0.3),
+    inset 0 -2px 6px 0 rgba(10, 37, 64, 0.35);
+}
