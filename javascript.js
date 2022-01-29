@@ -369,3 +369,15 @@ const guesses = document.querySelectorAll(".guess");
 guesses.forEach((guess) =>
   guess.addEventListener("click", () => game(guess.title))
 );
+
+// TODO: Implement stats
+// const statsButton = document.querySelector(".stats button");
+// statsButton.addEventListener("click", () => {
+//   const stats = document.querySelector(".stats-display");
+//   const isHidden = stats.hidden;
+//   stats.hidden = !isHidden;
+//   statsButton.classList.toggle("inverse");
+//   statsButton.innerText = statsButton.innerText = "Show Stats"
+//     ? "Hide Stats"
+//     : "Show Stats";
+// });

@@ -94,6 +94,21 @@ footer .center {
   height: auto;
 }
 
+.stats {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 600px;
+  max-width: 100%;
+  height: auto;
+}
+
+.stats-display {
+  margin-top: 12px;
+}
+
 .scores,
 .results {
   display: flex;
@@ -144,7 +159,7 @@ footer .center {
   min-height: 48px;
 }
 
-button.play {
+button {
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -152,6 +167,11 @@ button.play {
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
+}
+
+button.inverse {
+  color: #fff;
+  background-color: #ccc;
 }
 
 /* Adapted from https://stackoverflow.com/a/48916502/4245038 */
