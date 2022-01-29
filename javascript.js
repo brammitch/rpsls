@@ -11,6 +11,50 @@ const RPSLS_LOOKUP = {
   Spock: 5,
 };
 
+const STATS = {
+  played: 0,
+  computerWins: {
+    game: 0,
+    round: 0,
+  },
+  playerWins: {
+    game: 0,
+    round: 0,
+  },
+  tiedRounds: 0,
+  Scissors: {
+    computer: 0,
+    player: 0,
+  },
+  Paper: {
+    computer: 0,
+    player: 0,
+  },
+  Rock: {
+    computer: 0,
+    player: 0,
+  },
+  Lizard: {
+    computer: 0,
+    player: 0,
+  },
+  Spock: {
+    computer: 0,
+    player: 0,
+  },
+};
+
+/**
+ *
+ * @param {Guess} playerGuess
+ * @param {Guess} computerGuess
+ */
+function updateStats(playerGuess, computerGuess) {
+  STATS.played++;
+  STATS[playerGuess].player++;
+  STATS[computerGuess].computer++;
+}
+
 /**
  *
  * @returns {[number, Guess]}
@@ -116,8 +160,16 @@ function playRound(playerGuess) {
   const playerNumber = RPSLS_LOOKUP[playerGuess];
   const [computerNumber, computerGuess] = computerPlay();
 
+  updateStats(playerGuess, computerGuess);
+
   playerGuessElement.appendChild(getGuessElement(playerGuess));
+  if (playerGuessElement.childElementCount > 6) {
+    playerGuessElement.removeChild(playerGuessElement.firstChild);
+  }
   computerGuessElement.appendChild(getGuessElement(computerGuess));
+  if (computerGuessElement.childElementCount > 6) {
+    computerGuessElement.removeChild(computerGuessElement.firstChild);
+  }
 
   /*
     Calculate playerNumber - computerNumber
@@ -138,23 +190,17 @@ function playRound(playerGuess) {
 
   if ((result > 0 && result % 2 === 0) || (result < 0 && result % 2 !== 0)) {
     return (
-      "You won this round! " +
-      playerGuess +
-      " " +
-      verb +
-      " " +
-      computerGuess +
-      "."
+      "You won this round__" + playerGuess + "__" + verb + "__" + computerGuess
     );
   } else {
     return (
-      "You lost this round! " +
+      "You lost this round__" +
       computerGuess +
-      " " +
+      "__" +
       verb +
-      " " +
+      "__" +
       playerGuess +
-      "."
+      "__"
     );
   }
 }
@@ -165,26 +211,58 @@ function playRound(playerGuess) {
  */
 function game(guess) {
   if (isGameRunning) {
-    let result = playRound(guess);
+    const result = playRound(guess);
 
-    if (result.includes("lost")) {
-      computerScore++;
-    } else if (result.includes("won")) {
-      playerScore++;
+    if (result.includes("Tie")) {
+      resultElement.innerHTML = result;
+    } else {
+      const [statement, winningGuess, verb, losingGuess] = result.split("__");
+      const resultSpan = document.createElement("span");
+      resultSpan.style["background-color"] = `var(--${winningGuess})`;
+
+      const winningElement = document.createElement("span");
+      winningElement.innerText = winningGuess;
+      resultSpan.appendChild(winningElement);
+
+      const verbElement = document.createElement("span");
+      verbElement.style.color = "rgba(255, 0, 0, 0.9)";
+      verbElement.style["font-weight"] = "bolder";
+      verbElement.innerText = ` ${verb} `;
+      resultSpan.appendChild(verbElement);
+
+      const losingElement = document.createElement("span");
+      losingElement.innerText = `${losingGuess.toLocaleLowerCase()}! `;
+      resultSpan.appendChild(losingElement);
+
+      if (result.includes("lost")) {
+        computerScore++;
+      } else if (result.includes("won")) {
+        playerScore++;
+      }
+
+      const finalElement = document.createElement("span");
+      finalElement.style["font-weight"] = "bolder";
+      if (playerScore === 5) {
+        finalElement.innerText += "You win the game!";
+        resultSpan.appendChild(finalElement);
+        endGame();
+      } else if (computerScore === 5) {
+        finalElement.innerText += "Computer wins the game!";
+        resultSpan.appendChild(finalElement);
+        endGame();
+      } else {
+        const statementElement = document.createElement("span");
+        statementElement.innerText = `${statement}! `;
+        resultSpan.appendChild(statementElement);
+      }
+
+      resultElement.innerHTML = null;
+      resultElement.appendChild(resultSpan);
+
+      // Update scores
+      playerScoreElement.innerHTML = playerScore;
+      computerScoreElement.innerHTML = computerScore;
     }
-
-    if (playerScore === 5) {
-      result += " You win the game!";
-      endGame();
-    } else if (computerScore === 5) {
-      result += " Computer wins the game!";
-      endGame();
-    }
-
-    // Update scores
-    playerScoreElement.innerHTML = playerScore;
-    computerScoreElement.innerHTML = computerScore;
-    resultElement.innerHTML = result;
   }
 }
 
@@ -197,14 +275,35 @@ function endGame() {
     g.classList.add("disabled-guess");
   });
 
-  const resultsElement = document.querySelector(".results");
   const button = document.createElement("button");
-  button.innerHTML = "Play Again";
+  button.innerText = "Play Again";
   button.classList.add("play");
-  button.onclick = () => {
-    location.reload();
-  };
+  button.onclick = () => restartGame(button);
   resultsElement.appendChild(button);
+}
+
+function restartGame(button) {
+  const guessElements = document.querySelectorAll(".disabled-guess");
+  guessElements.forEach((g) => {
+    g.classList.remove("disabled-guess");
+    g.classList.add("guess");
+  });
+
+  resultsElement.removeChild(button);
+
+  // Reset scores
+  playerScore = 0;
+  playerScoreElement.innerHTML = playerScore;
+  computerScore = 0;
+  computerScoreElement.innerHTML = computerScore;
+
+  // Clear history/results
+  resultElement.innerHTML = null;
+  playerGuessElement.innerHTML = null;
+  computerGuessElement.innerHTML = null;
+
+  // restartGame
+  isGameRunning = true;
 }
 
 function setupImagemap() {
@@ -232,7 +331,7 @@ function setupImagemap() {
     const diameter = radius * 2;
 
     wrapper.innerHTML +=
-      "<a href='#' title='" +
+      "<a href='#image-map' title='" +
       area.getAttribute("title") +
       "' class='guess' style='left: " +
       left +
@@ -250,6 +349,8 @@ function setupImagemap() {
 setupImagemap();
 let isGameRunning = true;
 
+const resultsElement = document.querySelector(".results");
+
 let playerScore = 0;
 const playerScoreElement = document.querySelector("#player-score");
 playerScoreElement.innerHTML = playerScore;
@@ -258,9 +359,8 @@ let computerScore = 0;
 const computerScoreElement = document.querySelector("#computer-score");
 computerScoreElement.innerHTML = computerScore;
 
-let result = "";
 const resultElement = document.querySelector("#result");
-resultElement.innerHTML = " ";
+resultElement.innerHTML = "Select your first guess to start.";
 
 const playerGuessElement = document.querySelector("#player-guess");
 const computerGuessElement = document.querySelector("#computer-guess");
