@@ -1,0 +1,31 @@
+.guesses {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 600px;
+}
+
+img {
+  min-width: 600px;
+  max-width: 100%;
+  height: auto;
+}
+
+.imagemap {
+  position: relative;
+}
+
+.imagemap img {
+  display: block;
+}
+
+.imagemap .guess {
+  display: block;
+  position: absolute;
+  transition: box-shadow 0.15s ease-in-out;
+  border-radius: 50%;
+}
+
+.imagemap .guess:hover {
+  box-shadow: 0px 0px 1vw rgba(0, 0, 0, 0.5);
+}
