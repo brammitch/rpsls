@@ -347,6 +347,8 @@ function setupImagemap() {
 
 // Game starts here
 setupImagemap();
+window.onresize = setupImagemap();
+
 let isGameRunning = true;
 
 const resultsElement = document.querySelector(".results");

@@ -1,5 +1,21 @@
 @import "font/stylesheet.css";
 
+/* Default to mobile display, but allow for desktop display if screen size is large enough. */
+.desktop {
+  display: none;
+}
+.mobile {
+  display: initial;
+}
+@media (min-width: 1440px) and (min-height: 900px) {
+  .desktop {
+    display: initial;
+  }
+  .mobile {
+    display: none;
+  }
+}
+
 :root {
   --Rock: #ffd5d5;
   --Paper: #fff6d5;
@@ -48,6 +64,7 @@ footer {
   height: 48px;
   color: #fff;
   padding: 0px 16px;
+  bottom: 0;
 }
 
 .footer-container {
