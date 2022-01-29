@@ -22,7 +22,7 @@ function computerPlay() {
     case 1:
       return [1, "Scissors"];
     case 2:
-      return [2, "Rock"];
+      return [2, "Paper"];
     case 3:
       return [3, "Rock"];
     case 4:
@@ -36,7 +36,6 @@ function computerPlay() {
  *
  * @param {Guess} guessA
  * @param {Guess} guessB
- * @returns {(string | null)}
  */
 function getVerb(guessA, guessB) {
   let verb = "";
@@ -95,12 +94,30 @@ function getVerb(guessA, guessB) {
 
 /**
  *
+ * @param {Guess} guess
+ */
+function getGuessElement(guess) {
+  const guessImageContainer = document.createElement("span");
+  guessImageContainer.classList.add("guess-image-container");
+  const guessImage = document.createElement("img");
+  guessImage.src = `img/${guess.toLocaleLowerCase()}_sm.png`;
+  guessImage.height = "40";
+  guessImage.width = "40";
+  guessImageContainer.appendChild(guessImage);
+
+  return guessImageContainer;
+}
+
+/**
+ *
  * @param {Guess} playerGuess
- * @returns {string}
  */
 function playRound(playerGuess) {
   const playerNumber = RPSLS_LOOKUP[playerGuess];
   const [computerNumber, computerGuess] = computerPlay();
+
+  playerGuessElement.appendChild(getGuessElement(playerGuess));
+  computerGuessElement.appendChild(getGuessElement(computerGuess));
 
   /*
     Calculate playerNumber - computerNumber
@@ -120,9 +137,25 @@ function playRound(playerGuess) {
   }
 
   if ((result > 0 && result % 2 === 0) || (result < 0 && result % 2 !== 0)) {
-    return "You win! " + playerGuess + " " + verb + " " + computerGuess + ".";
+    return (
+      "You won this round! " +
+      playerGuess +
+      " " +
+      verb +
+      " " +
+      computerGuess +
+      "."
+    );
   } else {
-    return "You lose! " + computerGuess + " " + verb + " " + playerGuess + ".";
+    return (
+      "You lost this round! " +
+      computerGuess +
+      " " +
+      verb +
+      " " +
+      playerGuess +
+      "."
+    );
   }
 }
 
@@ -131,26 +164,53 @@ function playRound(playerGuess) {
  * @param {Guess} guess
  */
 function game(guess) {
-  let playerScore = 0;
-  let computerScore = 0;
+  if (isGameRunning) {
+    let result = playRound(guess);
 
-  const result = playRound(guess);
+    if (result.includes("lost")) {
+      computerScore++;
+    } else if (result.includes("won")) {
+      playerScore++;
+    }
 
-  if (result.includes("lose")) {
-    computerScore++;
-  } else if (result.includes("win")) {
-    playerScore++;
+    if (playerScore === 5) {
+      result += " You win the game!";
+      endGame();
+    } else if (computerScore === 5) {
+      result += " Computer wins the game!";
+      endGame();
+    }
+
+    // Update scores
+    playerScoreElement.innerHTML = playerScore;
+    computerScoreElement.innerHTML = computerScore;
+    resultElement.innerHTML = result;
   }
+}
 
-  console.log(
-    result + " -- Player: " + playerScore + " Computer: " + computerScore
-  );
+function endGame() {
+  isGameRunning = false;
+
+  const guessElements = document.querySelectorAll(".guess");
+  guessElements.forEach((g) => {
+    g.classList.remove("guess");
+    g.classList.add("disabled-guess");
+  });
+
+  const resultsElement = document.querySelector(".results");
+  const button = document.createElement("button");
+  button.innerHTML = "Play Again";
+  button.classList.add("play");
+  button.onclick = () => {
+    location.reload();
+  };
+  resultsElement.appendChild(button);
 }
 
 function setupImagemap() {
-  // adapted from https://stackoverflow.com/a/64711402/4245038
+  // Adapted from https://stackoverflow.com/a/64711402/4245038
   const image = document.querySelector("img[usemap]");
-  const mapid = image.getAttribute("usemap").substr(1);
+  const mapid = image.getAttribute("usemap").substring(1);
   const imagemap = document.querySelector('map[name="' + mapid + '"]');
   const areas = imagemap.querySelectorAll("area");
 
@@ -172,9 +232,7 @@ function setupImagemap() {
     const diameter = radius * 2;
 
     wrapper.innerHTML +=
-      "<a href='" +
-      area.getAttribute("href") +
-      "' title='" +
+      "<a href='#' title='" +
       area.getAttribute("title") +
       "' class='guess' style='left: " +
       left +
@@ -190,6 +248,23 @@ function setupImagemap() {
 
 // Game starts here
 setupImagemap();
+let isGameRunning = true;
+
+let playerScore = 0;
+const playerScoreElement = document.querySelector("#player-score");
+playerScoreElement.innerHTML = playerScore;
+
+let computerScore = 0;
+const computerScoreElement = document.querySelector("#computer-score");
+computerScoreElement.innerHTML = computerScore;
+
+let result = "";
+const resultElement = document.querySelector("#result");
+resultElement.innerHTML = " ";
+
+const playerGuessElement = document.querySelector("#player-guess");
+const computerGuessElement = document.querySelector("#computer-guess");
+
 const guesses = document.querySelectorAll(".guess");
 guesses.forEach((guess) =>
   guess.addEventListener("click", () => game(guess.title))
