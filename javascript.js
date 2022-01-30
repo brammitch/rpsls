@@ -362,7 +362,8 @@ const computerScoreElement = document.querySelector("#computer-score");
 computerScoreElement.innerHTML = computerScore;
 
 const resultElement = document.querySelector("#result");
-resultElement.innerHTML = "Select your first guess to start.";
+resultElement.innerHTML =
+  "<span>Pick a guess to start.</span><span>First to five points wins the game!</span>";
 
 const playerGuessElement = document.querySelector("#player-guess");
 const computerGuessElement = document.querySelector("#computer-guess");
