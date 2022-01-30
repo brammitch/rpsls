@@ -45,7 +45,7 @@ header span {
   padding: 0px 4px;
   font-size: 32px;
   font-style: italic;
-  font-weight: 600;
+  font-weight: bold;
 }
 
 .container {
@@ -149,7 +149,7 @@ footer .center {
 
 .score-label {
   font-size: 1.2rem;
-  font-weight: bolder;
+  font-weight: bold;
 }
 
 .score-number {
